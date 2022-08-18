@@ -25,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="package com.shevy.clubolympus"
+            android:name=".data.OlympusContentProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
