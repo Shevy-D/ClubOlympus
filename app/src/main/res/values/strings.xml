@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ClubOlympus</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="gender">Gender</string>
+    <string name="group">Group</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="non_gender">Non gender</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>
