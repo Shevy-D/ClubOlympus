@@ -1,10 +1,12 @@
 package com.shevy.clubolympus.data
 
 import android.content.ContentProvider
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import com.shevy.clubolympus.data.ClubOlympusContract.MemberEntry
 
 class OlympusContentProvider : ContentProvider() {
     private val members = 111
@@ -22,13 +24,44 @@ class OlympusContentProvider : ContentProvider() {
     }
 
     override fun query(
-        p0: Uri,
-        p1: Array<out String>?,
-        p2: String?,
-        p3: Array<out String>?,
-        p4: String?
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
     ): Cursor? {
-        return null
+        val db = dbOpenHelper.readableDatabase
+        val cursor = when (uriMatcher.match(uri)) {
+            members -> {
+                db.query(
+                    MemberEntry.TABLE_NAME,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    sortOrder
+                )
+            }
+            membersId -> {
+                val selection = "${MemberEntry._ID}=?"
+                val selectionArgs = arrayOf(ContentUris.parseId(uri).toString())
+                db.query(
+                    MemberEntry.TABLE_NAME,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    sortOrder
+                )
+            }
+            else -> {
+                throw IllegalArgumentException("Can't query incorrect URI $uri")
+            }
+        }
+        cursor.setNotificationUri(context?.contentResolver,uri)
+        return cursor
     }
 
     override fun insert(p0: Uri, p1: ContentValues?): Uri? {
