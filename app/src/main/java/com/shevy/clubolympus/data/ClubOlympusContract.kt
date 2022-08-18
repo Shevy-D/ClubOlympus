@@ -6,10 +6,10 @@ import android.provider.BaseColumns
 
 object ClubOlympusContract {
 
-/*    const val DATABASE_VERSION = 1
+    const val DATABASE_VERSION = 1
     const val DATABASE_NAME = "olympus"
-    const val SCHEME = "content://"
-    const val AUTHORITY = "com.example.clubolympus"
+/*    const val SCHEME = "content://"
+    const val AUTHORITY = "com.shevy.clubolympus"
     const val PATH_MEMBERS = "members"
     val BASE_CONTENT_URI: Uri = Uri.parse(SCHEME + AUTHORITY)*/
 

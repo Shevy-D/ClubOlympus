@@ -22,7 +22,6 @@ class AddMemberActivity : AppCompatActivity() {
     private lateinit var groupNameEditText: EditText
     private lateinit var genderSpinner: Spinner
 
-    //private lateinit var spinnerAdapter: ArrayAdapter<String>
     private var gender: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
