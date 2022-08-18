@@ -8,10 +8,10 @@ object ClubOlympusContract {
 
     const val DATABASE_VERSION = 1
     const val DATABASE_NAME = "olympus"
-/*    const val SCHEME = "content://"
+    const val SCHEME = "content://"
     const val AUTHORITY = "com.shevy.clubolympus"
     const val PATH_MEMBERS = "members"
-    val BASE_CONTENT_URI: Uri = Uri.parse(SCHEME + AUTHORITY)*/
+    val BASE_CONTENT_URI: Uri = Uri.parse(SCHEME + AUTHORITY)
 
     object MemberEntry : BaseColumns {
         const val TABLE_NAME = "members"

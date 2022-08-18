@@ -2,11 +2,19 @@ package com.shevy.clubolympus.data
 
 import android.content.ContentProvider
 import android.content.ContentValues
+import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 
 class OlympusContentProvider : ContentProvider() {
+    private val members = 111
+    private val membersId = 222
+
     lateinit var dbOpenHelper: OlympusDbOpenHelper
+    private val sUriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
+        addURI(ClubOlympusContract.AUTHORITY, ClubOlympusContract.PATH_MEMBERS, members)
+        addURI(ClubOlympusContract.AUTHORITY, ClubOlympusContract.PATH_MEMBERS + "/#", membersId)
+    }
 
     override fun onCreate(): Boolean {
         dbOpenHelper = OlympusDbOpenHelper(context)
