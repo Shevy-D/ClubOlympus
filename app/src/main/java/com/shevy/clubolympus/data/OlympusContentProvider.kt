@@ -11,7 +11,7 @@ class OlympusContentProvider : ContentProvider() {
     private val membersId = 222
 
     lateinit var dbOpenHelper: OlympusDbOpenHelper
-    private val sUriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
+    private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         addURI(ClubOlympusContract.AUTHORITY, ClubOlympusContract.PATH_MEMBERS, members)
         addURI(ClubOlympusContract.AUTHORITY, ClubOlympusContract.PATH_MEMBERS + "/#", membersId)
     }
