@@ -21,7 +21,7 @@ class OlympusContentProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         dbOpenHelper = OlympusDbOpenHelper(context)
-            return true
+        return true
     }
 
     override fun query(
@@ -61,7 +61,7 @@ class OlympusContentProvider : ContentProvider() {
                 throw IllegalArgumentException("Can't query incorrect URI $uri")
             }
         }
-        cursor.setNotificationUri(context?.contentResolver,uri)
+        cursor.setNotificationUri(context?.contentResolver, uri)
         return cursor
     }
 
@@ -74,7 +74,7 @@ class OlympusContentProvider : ContentProvider() {
                     Log.e("insertMethod", "Insertion of data in the table failed for $uri")
                     return null
                 }
-                context?.contentResolver?.notifyChange(uri,null)
+                context?.contentResolver?.notifyChange(uri, null)
                 return ContentUris.withAppendedId(uri, id)
             }
             else -> {
@@ -83,11 +83,43 @@ class OlympusContentProvider : ContentProvider() {
         }
     }
 
-    override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
-        return 0
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<out String>?
+    ): Int {
+        val db = dbOpenHelper.writableDatabase
+        val count = when (uriMatcher.match(uri)) {
+            members -> {
+                db.update(
+                    MemberEntry.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs
+                )
+            }
+            membersId -> {
+                val selection = "${MemberEntry._ID}=?"
+                val selectionArgs = arrayOf(ContentUris.parseId(uri).toString())
+                db.update(
+                    MemberEntry.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs
+                )
+            }
+            else -> {
+                throw IllegalArgumentException("Can't update URI $uri")
+            }
+        }
+        if (count != 0) {
+            context?.contentResolver?.notifyChange(uri, null)
+        }
+        return count
     }
 
-    override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
+    override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
         return 0
     }
 

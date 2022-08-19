@@ -50,18 +50,18 @@ class MainActivity : AppCompatActivity() {
                     MemberEntry.COLUMN_SPORT
         )
 
-        val idIndex = cursor?.getColumnIndex(MemberEntry._ID)
-        val idFirstName = cursor?.getColumnIndex(MemberEntry.COLUMN_FIRST_NAME)
-        val idLastName = cursor?.getColumnIndex(MemberEntry.COLUMN_LAST_NAME)
-        val idGender = cursor?.getColumnIndex(MemberEntry.COLUMN_GENDER)
-        val idSport = cursor?.getColumnIndex(MemberEntry.COLUMN_SPORT)
+        val idColumnIndex = cursor?.getColumnIndex(MemberEntry._ID)
+        val firstNameColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_FIRST_NAME)
+        val lastNameColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_LAST_NAME)
+        val genderColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_GENDER)
+        val sportColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_SPORT)
 
         while (cursor?.moveToNext() == true) {
-            val currentId = idIndex?.let { cursor.getInt(it) }
-            val currentFirstName = idFirstName?.let { cursor.getString(it) }
-            val currentLastName = idLastName?.let { cursor.getString(it) }
-            val currentGender = idGender?.let { cursor.getString(it) }
-            val currentSport = idSport?.let { cursor.getString(it) }
+            val currentId = idColumnIndex?.let { cursor.getInt(it) }
+            val currentFirstName = firstNameColumnIndex?.let { cursor.getString(it) }
+            val currentLastName = lastNameColumnIndex?.let { cursor.getString(it) }
+            val currentGender = genderColumnIndex?.let { cursor.getString(it) }
+            val currentSport = sportColumnIndex?.let { cursor.getString(it) }
 
             dataTextView.append("\n$currentId $currentFirstName $currentLastName $currentGender $currentSport")
         }
