@@ -10,28 +10,24 @@ import android.widget.CursorAdapter
 import android.widget.TextView
 import com.shevy.clubolympus.data.ClubOlympusContract.MemberEntry
 
-class MemberCursorAdapter(context: Context?, c: Cursor?) :
-    CursorAdapter(context, c, 0) {
+class MemberCursorAdapter(context: Context?, c: Cursor?, autoRequery: Boolean) :
+    CursorAdapter(context, c, autoRequery) {
     override fun newView(context: Context?, cursor: Cursor?, parent: ViewGroup?): View {
         return LayoutInflater.from(context).inflate(R.layout.member_item, parent, false)
     }
 
     @SuppressLint("Range")
     override fun bindView(view: View?, context: Context?, cursor: Cursor?) {
-        val tvItemName = view?.findViewById(R.id.tvItemName) as TextView
-        val tvItemGender = view.findViewById(R.id.tvItemGender) as TextView
-        val tvItemSportGroup = view.findViewById(R.id.tvItemSportGroup) as TextView
-        if (cursor != null && context != null) {
-            tvItemName.text = cursor.getString(cursor.getColumnIndex(MemberEntry.COLUMN_FIRST_NAME))
-            tvItemName.append(" ")
-            tvItemName.append(cursor.getString(cursor.getColumnIndex(MemberEntry.COLUMN_LAST_NAME)))
-            tvItemGender.text = when (cursor.getInt(cursor.getColumnIndex(MemberEntry.COLUMN_GENDER))) {
-                MemberEntry.GENDER_MALE -> context.getString(R.string.male)
-                MemberEntry.GENDER_FEMALE -> context.getString(R.string.female)
-                else -> context.getString(R.string.non_gender)
-            }
-            tvItemSportGroup.text = cursor.getString(cursor.getColumnIndex(MemberEntry.COLUMN_SPORT_GROUP))
-        }
+        val firstNameTextView = view?.findViewById(R.id.firstNameTextView) as TextView
+        val lastNameTextView = view.findViewById(R.id.lastNameTextView) as TextView
+        val sportTextView = view.findViewById(R.id.sportNameTextView) as TextView
 
+        if (cursor != null && context != null) {
+            firstNameTextView.text =
+                cursor.getString(cursor.getColumnIndex(MemberEntry.COLUMN_FIRST_NAME))
+            lastNameTextView.text =
+                cursor.getString(cursor.getColumnIndex(MemberEntry.COLUMN_LAST_NAME))
+            sportTextView.text = cursor.getString(cursor.getColumnIndex(MemberEntry.COLUMN_SPORT))
+        }
     }
 }

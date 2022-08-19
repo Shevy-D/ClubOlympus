@@ -1,24 +1,28 @@
 package com.shevy.clubolympus
 
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
-import android.widget.TextView
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.Loader
 import com.shevy.clubolympus.data.ClubOlympusContract.MemberEntry
 import com.shevy.clubolympus.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+LoaderManager.LoaderCallbacks<Cursor>{
     lateinit var binding: ActivityMainBinding
 
-    lateinit var dataTextView: TextView
+    lateinit var dataListView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        dataTextView = binding.dataTextView
+        dataListView = binding.dataListView
 
         val floatingActionButton = binding.floatingActionButton
         floatingActionButton.setOnClickListener {
@@ -41,31 +45,20 @@ class MainActivity : AppCompatActivity() {
         )
 
         val cursor = contentResolver.query(MemberEntry.CONTENT_URI, projection, null, null, null)
-        dataTextView.text = "All members\n\n"
-        dataTextView.append(
-            "${MemberEntry._ID} " +
-                    "${MemberEntry.COLUMN_FIRST_NAME} " +
-                    "${MemberEntry.COLUMN_LAST_NAME} " +
-                    "${MemberEntry.COLUMN_GENDER} " +
-                    MemberEntry.COLUMN_SPORT
-        )
+        val cursorAdapter = MemberCursorAdapter(this, cursor, false)
+        dataListView.adapter = cursorAdapter
 
-        val idColumnIndex = cursor?.getColumnIndex(MemberEntry._ID)
-        val firstNameColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_FIRST_NAME)
-        val lastNameColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_LAST_NAME)
-        val genderColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_GENDER)
-        val sportColumnIndex = cursor?.getColumnIndex(MemberEntry.COLUMN_SPORT)
+    }
 
-        while (cursor?.moveToNext() == true) {
-            val currentId = idColumnIndex?.let { cursor.getInt(it) }
-            val currentFirstName = firstNameColumnIndex?.let { cursor.getString(it) }
-            val currentLastName = lastNameColumnIndex?.let { cursor.getString(it) }
-            val currentGender = genderColumnIndex?.let { cursor.getString(it) }
-            val currentSport = sportColumnIndex?.let { cursor.getString(it) }
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        TODO("Not yet implemented")
+    }
 
-            dataTextView.append("\n$currentId $currentFirstName $currentLastName $currentGender $currentSport")
-        }
+    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
+        TODO("Not yet implemented")
+    }
 
-        cursor?.close()
+    override fun onLoaderReset(loader: Loader<Cursor>) {
+        TODO("Not yet implemented")
     }
 }
