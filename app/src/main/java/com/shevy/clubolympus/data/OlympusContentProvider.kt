@@ -148,8 +148,18 @@ class OlympusContentProvider : ContentProvider() {
         return count
     }
 
-    override fun getType(p0: Uri): String? {
-        return null
+    override fun getType(uri: Uri): String? {
+        return when (uriMatcher.match(uri)) {
+            members -> {
+                MemberEntry.CONTENT_MULTIPLE_ITEMS
+            }
+            membersId -> {
+                MemberEntry.CONTENT_SINGLE_ITEM
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI $uri")
+            }
+        }
     }
 }
 
