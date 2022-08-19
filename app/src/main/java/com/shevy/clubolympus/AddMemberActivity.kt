@@ -31,7 +31,7 @@ class AddMemberActivity : AppCompatActivity() {
         val currentMemberUri = intent.data
 
         title = if (currentMemberUri == null) {
-            "Add a Member"
+            "Add Member"
         } else {
             "Edit the Member"
         }
