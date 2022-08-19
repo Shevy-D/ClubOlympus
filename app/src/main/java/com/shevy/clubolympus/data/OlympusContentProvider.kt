@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.util.Log
 import com.shevy.clubolympus.data.ClubOlympusContract.MemberEntry
 
 class OlympusContentProvider : ContentProvider() {
@@ -20,7 +21,7 @@ class OlympusContentProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         dbOpenHelper = OlympusDbOpenHelper(context)
-            return false
+            return true
     }
 
     override fun query(
@@ -64,8 +65,22 @@ class OlympusContentProvider : ContentProvider() {
         return cursor
     }
 
-    override fun insert(p0: Uri, p1: ContentValues?): Uri? {
-        return null
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        val db = dbOpenHelper.writableDatabase
+        when (uriMatcher.match(uri)) {
+            members -> {
+                val id = db.insert(MemberEntry.TABLE_NAME, null, values)
+                if (id == (-1).toLong()) {
+                    Log.e("insertMethod", "Insertion of data in the table failed for $uri")
+                    return null
+                }
+                context?.contentResolver?.notifyChange(uri,null)
+                return ContentUris.withAppendedId(uri, id)
+            }
+            else -> {
+                throw IllegalArgumentException("Insertion of data in the table failed for $uri")
+            }
+        }
     }
 
     override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {

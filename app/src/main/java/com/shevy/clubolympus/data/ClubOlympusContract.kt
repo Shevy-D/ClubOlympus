@@ -25,10 +25,10 @@ object ClubOlympusContract {
         const val GENDER_MALE = 1
         const val GENDER_FEMALE = 2
 
-/*        val CONTENT_URI: Uri = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_MEMBERS)
+        val CONTENT_URI: Uri = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_MEMBERS)
         const val CONTENT_MULTIPLE_ITEMS = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/" + AUTHORITY + "/" + PATH_MEMBERS
         const val CONTENT_SINGLE_ITEM = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/" + AUTHORITY + "/" + PATH_MEMBERS*/
+                "/" + AUTHORITY + "/" + PATH_MEMBERS
     }
 }

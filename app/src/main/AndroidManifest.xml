@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:authorities="package com.shevy.clubolympus"
+            android:authorities="com.shevy.clubolympus"
             android:name=".data.OlympusContentProvider"
             android:exported="false" />
     </application>
