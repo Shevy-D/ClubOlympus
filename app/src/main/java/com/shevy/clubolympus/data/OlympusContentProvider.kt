@@ -9,6 +9,7 @@ import android.net.Uri
 import android.util.Log
 import com.shevy.clubolympus.data.ClubOlympusContract.MemberEntry
 
+
 class OlympusContentProvider : ContentProvider() {
     private val members = 111
     private val membersId = 222
@@ -66,6 +67,18 @@ class OlympusContentProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        val firstName = values!!.getAsString(MemberEntry.COLUMN_FIRST_NAME)
+            ?: throw java.lang.IllegalArgumentException("You have to input first name")
+
+        val lastName = values.getAsString(MemberEntry.COLUMN_LAST_NAME)
+            ?: throw java.lang.IllegalArgumentException("You have to input last name")
+
+        val gender = values.getAsInteger(MemberEntry.COLUMN_GENDER)
+        require(!(gender == null || !(gender == MemberEntry.GENDER_UNKNOWN || gender == MemberEntry.GENDER_MALE || gender == MemberEntry.GENDER_FEMALE))) { "You have to input correct gender " }
+
+        val sport = values.getAsString(MemberEntry.COLUMN_SPORT)
+            ?: throw java.lang.IllegalArgumentException("You have to input sport")
+
         val db = dbOpenHelper.writableDatabase
         when (uriMatcher.match(uri)) {
             members -> {
@@ -89,6 +102,34 @@ class OlympusContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?
     ): Int {
+        if (values != null) {
+            if (values.containsKey(MemberEntry.COLUMN_FIRST_NAME)) {
+                val firstName = values.getAsString(MemberEntry.COLUMN_FIRST_NAME)
+                    ?: throw java.lang.IllegalArgumentException("You have to input first name")
+            }
+        }
+
+        if (values != null) {
+            if (values.containsKey(MemberEntry.COLUMN_LAST_NAME)) {
+                val lastName = values.getAsString(MemberEntry.COLUMN_LAST_NAME)
+                    ?: throw java.lang.IllegalArgumentException("You have to input last name")
+            }
+        }
+
+        if (values != null) {
+            if (values.containsKey(MemberEntry.COLUMN_GENDER)) {
+                val gender = values.getAsInteger(MemberEntry.COLUMN_GENDER)
+                require(!(gender == null || !(gender == MemberEntry.GENDER_UNKNOWN || gender == MemberEntry.GENDER_MALE || gender == MemberEntry.GENDER_FEMALE))) { "You have to input correct gender " }
+            }
+        }
+
+        if (values != null) {
+            if (values.containsKey(MemberEntry.COLUMN_SPORT)) {
+                val sport = values.getAsString(MemberEntry.COLUMN_SPORT)
+                    ?: throw java.lang.IllegalArgumentException("You have to input sport")
+            }
+        }
+
         val db = dbOpenHelper.writableDatabase
         val count = when (uriMatcher.match(uri)) {
             members -> {
