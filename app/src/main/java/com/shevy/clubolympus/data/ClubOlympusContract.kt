@@ -20,6 +20,7 @@ object ClubOlympusContract {
         const val COLUMN_LAST_NAME = "lastName"
         const val COLUMN_GENDER = "gender"
         const val COLUMN_SPORT = "sport"
+        const val COLUMN_SPORT_GROUP = "sportGroup"
 
         const val GENDER_UNKNOWN = 0
         const val GENDER_MALE = 1
