@@ -1,5 +1,6 @@
 package com.shevy.clubolympus
 
+import android.content.ContentUris
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
@@ -34,6 +35,13 @@ class MainActivity : AppCompatActivity(),
 
         memberCursorAdapter = MemberCursorAdapter(this, null, false)
         dataListView.adapter = memberCursorAdapter
+
+        dataListView.setOnItemClickListener { _, _, _, id ->
+            val intent = Intent(this@MainActivity, AddMemberActivity::class.java)
+            val currentUri = ContentUris.withAppendedId(MemberEntry.CONTENT_URI, id)
+            intent.data = currentUri
+            startActivity(intent)
+        }
 
         supportLoaderManager.initLoader(MEMBER_LOADER, null, this)
     }

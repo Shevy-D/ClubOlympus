@@ -27,6 +27,15 @@ class AddMemberActivity : AppCompatActivity() {
         binding = ActivityAddMemberBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val intent = intent
+        val currentMemberUri = intent.data
+
+        title = if (currentMemberUri == null) {
+            "Add a Member"
+        } else {
+            "Edit the Member"
+        }
+
         firstNameEditText = binding.etFirstName
         lastNameEditText = binding.etLastName
         sportEditText = binding.etSport
