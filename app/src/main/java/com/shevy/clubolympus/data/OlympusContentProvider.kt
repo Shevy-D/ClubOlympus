@@ -119,8 +119,33 @@ class OlympusContentProvider : ContentProvider() {
         return count
     }
 
-    override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
-        return 0
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
+        val db = dbOpenHelper.writableDatabase
+        val count = when (uriMatcher.match(uri)) {
+            members -> {
+                db.delete(
+                    MemberEntry.TABLE_NAME,
+                    selection,
+                    selectionArgs
+                )
+            }
+            membersId -> {
+                val selection = "${MemberEntry._ID}=?"
+                val selectionArgs = arrayOf(ContentUris.parseId(uri).toString())
+                db.delete(
+                    MemberEntry.TABLE_NAME,
+                    selection,
+                    selectionArgs
+                )
+            }
+            else -> {
+                throw IllegalArgumentException("Can't delete URI $uri")
+            }
+        }
+        if (count != 0) {
+            context?.contentResolver?.notifyChange(uri, null)
+        }
+        return count
     }
 
     override fun getType(p0: Uri): String? {
