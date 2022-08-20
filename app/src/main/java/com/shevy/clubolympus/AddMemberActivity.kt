@@ -1,6 +1,8 @@
 package com.shevy.clubolympus
 
+import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
@@ -47,7 +49,7 @@ class AddMemberActivity : AppCompatActivity(),
             title = "Edit the member"
             LoaderManager.getInstance(this).initLoader(EDIT_MEMBER_LOADER, null, this)
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         firstNameEditText = binding.etFirstName
         lastNameEditText = binding.etLastName
@@ -90,7 +92,10 @@ class AddMemberActivity : AppCompatActivity(),
                 saveMember()
                 return true
             }
-            R.id.delete_member -> return true
+            R.id.delete_member -> {
+                showDeleteMemberDialog()
+                return true
+            }
             android.R.id.home -> {
                 NavUtils.navigateUpFromSameTask(this)
                 return true
@@ -182,5 +187,39 @@ class AddMemberActivity : AppCompatActivity(),
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
         TODO("Not yet implemented")
+    }
+
+    private fun showDeleteMemberDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Do you want delete the Member")
+        builder.setPositiveButton(
+            "Delete"
+        ) { dialog, which -> deleteMember() }
+        builder.setNegativeButton(
+            "Cancel"
+        ) { dialog, which ->
+            dialog?.dismiss()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+
+    private fun deleteMember() {
+        if (currUri != null) {
+            val rowsDeleted = contentResolver.delete(currentMemberUri, null, null)
+            if (rowsDeleted == 0) {
+                Toast.makeText(
+                    this,
+                    "Deleting of data from the table failed", Toast.LENGTH_LONG
+                ).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Member is deleted", Toast.LENGTH_LONG
+                ).show()
+            }
+            finish()
+        }
     }
 }
