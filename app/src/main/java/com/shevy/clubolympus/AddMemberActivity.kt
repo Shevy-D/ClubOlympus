@@ -47,12 +47,7 @@ class AddMemberActivity : AppCompatActivity(),
             title = "Edit the member"
             LoaderManager.getInstance(this).initLoader(EDIT_MEMBER_LOADER, null, this)
         }
-
-        title = if (currentMemberUri == null) {
-            "Add a Member"
-        } else {
-            "Edit the Member"
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         firstNameEditText = binding.etFirstName
         lastNameEditText = binding.etLastName
@@ -82,8 +77,6 @@ class AddMemberActivity : AppCompatActivity(),
                 gender = 0
             }
         }
-
-        supportLoaderManager.initLoader(EDIT_MEMBER_LOADER, null, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -107,25 +100,37 @@ class AddMemberActivity : AppCompatActivity(),
     }
 
     private fun saveMember() {
-        val firstName = binding.etFirstName.text.toString().trim()
-        val lastName = binding.etLastName.text.toString().trim()
-        val sport = binding.etSport.text.toString().trim()
-
-        val contentValues = ContentValues().apply {
-            put(MemberEntry.COLUMN_FIRST_NAME, firstName)
-            put(MemberEntry.COLUMN_LAST_NAME, lastName)
-            put(MemberEntry.COLUMN_GENDER, gender)
-            put(MemberEntry.COLUMN_SPORT, sport)
+        val firstName = firstNameEditText.text.toString().trim { it <= ' ' }
+        val lastName = lastNameEditText.text.toString().trim { it <= ' ' }
+        val sport = sportEditText.text.toString().trim { it <= ' ' }
+        if (TextUtils.isEmpty(firstName)) {
+            Toast.makeText(this, "Input the first name", Toast.LENGTH_LONG).show()
+            return
+        } else if (TextUtils.isEmpty(lastName)) {
+            Toast.makeText(this, "Input the last name", Toast.LENGTH_LONG).show()
+            return
+        } else if (TextUtils.isEmpty(sport)) {
+            Toast.makeText(this, "Input sport", Toast.LENGTH_LONG).show()
+            return
+        } else if (gender == MemberEntry.GENDER_UNKNOWN) {
+            Toast.makeText(this, "Choose the gender", Toast.LENGTH_LONG).show()
+            return
         }
-
+        val contentValues = ContentValues()
+        contentValues.put(MemberEntry.COLUMN_FIRST_NAME, firstName)
+        contentValues.put(MemberEntry.COLUMN_LAST_NAME, lastName)
+        contentValues.put(MemberEntry.COLUMN_SPORT, sport)
+        contentValues.put(MemberEntry.COLUMN_GENDER, gender)
         if (currUri == null) {
+            val contentResolver = contentResolver
             val uri = contentResolver.insert(MemberEntry.CONTENT_URI, contentValues)
-
             if (uri == null) {
-                Toast.makeText(this, "Insertion of data in the table failed", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(
+                    this, "Insertion of data in the table failed",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
-                Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Data saved", Toast.LENGTH_LONG).show()
             }
         } else {
             val rowsChanged = contentResolver.update(
