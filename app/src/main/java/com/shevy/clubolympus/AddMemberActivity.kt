@@ -2,7 +2,6 @@ package com.shevy.clubolympus
 
 import android.app.AlertDialog
 import android.content.ContentValues
-import android.content.DialogInterface
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
@@ -42,8 +41,8 @@ class AddMemberActivity : AppCompatActivity(),
 
         currUri = intent.data
         if (currUri == null) {
-            invalidateOptionsMenu()
             title = "Add a member"
+            invalidateOptionsMenu()
         } else {
             currentMemberUri = currUri ?: MemberEntry.CONTENT_URI
             title = "Edit the member"
@@ -79,6 +78,15 @@ class AddMemberActivity : AppCompatActivity(),
                 gender = 0
             }
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        if (currUri == null) {
+            val menuItem = menu.findItem(R.id.delete_member)
+            menuItem.isVisible = false
+        }
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
