@@ -19,7 +19,7 @@ import com.shevy.clubolympus.databinding.ActivityAddMemberBinding
 
 
 class AddMemberActivity : AppCompatActivity(),
-    LoaderManager.LoaderCallbacks<Cursor>{
+    LoaderManager.LoaderCallbacks<Cursor> {
     lateinit var binding: ActivityAddMemberBinding
 
     private val EDIT_MEMBER_LOADER = 123
@@ -94,7 +94,7 @@ class AddMemberActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save_member -> {
-                insertMember()
+                saveMember()
                 return true
             }
             R.id.delete_member -> return true
@@ -106,7 +106,7 @@ class AddMemberActivity : AppCompatActivity(),
         return super.onOptionsItemSelected(item)
     }
 
-    private fun insertMember() {
+    private fun saveMember() {
         val firstName = binding.etFirstName.text.toString().trim()
         val lastName = binding.etLastName.text.toString().trim()
         val sport = binding.etSport.text.toString().trim()
@@ -118,12 +118,28 @@ class AddMemberActivity : AppCompatActivity(),
             put(MemberEntry.COLUMN_SPORT, sport)
         }
 
-        val uri = contentResolver.insert(MemberEntry.CONTENT_URI, contentValues)
+        if (currUri == null) {
+            val uri = contentResolver.insert(MemberEntry.CONTENT_URI, contentValues)
 
-        if (uri == null) {
-            Toast.makeText(this, "Insertion of data in the table failed", Toast.LENGTH_SHORT).show()
+            if (uri == null) {
+                Toast.makeText(this, "Insertion of data in the table failed", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show()
+            }
         } else {
-            Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show()
+            val rowsChanged = contentResolver.update(
+                currentMemberUri, contentValues,
+                null, null
+            )
+            if (rowsChanged == 0) {
+                Toast.makeText(
+                    this, "Saving of the data in the table failed",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                Toast.makeText(this, "Member updated", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
